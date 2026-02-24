@@ -1,4 +1,4 @@
-package ru.practicum.shareit.comment;
+package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,8 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.exception.*;
-import ru.practicum.shareit.item.Item;
-import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
@@ -26,31 +24,6 @@ public class CommentServiceImpl implements CommentService {
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentMapper commentMapper;
-
-    @Override
-    @Transactional
-    public CommentDto createComment(Long userId, Long itemId, CommentCreateDto createDto) {
-        log.info("Создание комментария пользователем {} для вещи {}", userId, itemId);
-
-        User author = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
-
-        Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new ItemNotFoundException("Вещь не найдена"));
-
-        boolean hasBooked = bookingRepository.existsByItemIdAndBookerIdAndStatusAndEndBefore(
-                itemId, userId, BookingStatus.APPROVED, LocalDateTime.now());
-
-        if (!hasBooked) {
-            throw new BadRequestException("Нельзя оставить комментарий к вещи, которую вы не бронировали");
-        }
-
-        Comment comment = commentMapper.toEntity(createDto, item, author);
-        Comment savedComment = commentRepository.save(comment);
-
-        log.info("Комментарий создан с id: {}", savedComment.getId());
-        return commentMapper.toDto(savedComment);
-    }
 
     @Override
     public List<CommentDto> getCommentsByItemId(Long itemId) {

@@ -1,9 +1,8 @@
-package ru.practicum.shareit.comment;
+package ru.practicum.shareit.item;
 
 import java.util.List;
 
 public interface CommentService {
-    CommentDto createComment(Long userId, Long itemId, CommentCreateDto createDto);
 
     List<CommentDto> getCommentsByItemId(Long itemId);
 

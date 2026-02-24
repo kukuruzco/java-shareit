@@ -1,4 +1,4 @@
-package ru.practicum.shareit.comment;
+package ru.practicum.shareit.item;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
