@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# PostgreSQL volumes
+volumes/
+!volumes/.gitkeep
+
+checkstyle.xml
